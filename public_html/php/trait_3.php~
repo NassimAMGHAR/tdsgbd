@@ -1,0 +1,23 @@
+
+<html>
+<head>
+Traitement 3 - fichier trait_3.php
+</head>
+<body bgcolor = green >
+
+<h1> Traitement 3 </h3>
+
+<?php
+$connection = ocilogon("namghar_a", "r4g1h3po", "dbinfo");
+$querry = " delete from sejour where jour < ".$_REQUEST['x'];
+echo "(affichage pour v&eacute;rifier : ".$querry.")</br>";
+$cursor = ociparse ($connection, $querry);
+ociexecute($cursor);
+	$n = oci_num_rows ($cursor);
+	echo " nombre de lignes :".$n."</br>";
+ocilogoff($connection);
+?>
+
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+--------------------------------------------------------------------------------
+menu_php.html
+--------------------------------------------------------------------------------
+
+<html>
+<head>
+fichier menu_php.html
+</head>
+<body bgcolor=orange>
+
+<h2>TD : mode programme : PHP</h2>
+
+<!----------------------------------------------------------------------------->
+<hr/>
+
+Traitement 3 :
+
+<form method = "post" action = "http://ssh1.ie2.u-psud.fr/~namghar/php/trait_3.php" >
+Entrer le jour apartir du quel vous voulez supprimer des sejour :</br>
+<input type = "text" name = "x" value = "0" ></input></br>
+<input type = "submit" name = "submit1" value = "Supprimer"></input>
+</form>
+
+<!----------------------------------------------------------------------------->
+<hr/>
+
+Consultation des sejours d'un client :
+<form method = "post" action = "http://ssh1.ie2.u-psud.fr/~namghar/php/consultation.php" >
+Entrez l'identifiant client : </br>
+<input type = "text" name = "x" value = "0" ></input></br>
+<input type = "submit" name = "submit" value = "Consulter"></input>
+</form>
+
+<!----------------------------------------------------------------------------->
+<hr/>
+
+Appel de la procedure PL/SQL traitement1 :
+<form method = "post" action = "trait_1.php" >
+Entrez le nom du client :</br>
+<input type = "text" name = "nom" ></input></br>
+son age :</br>
+<input type = "text" name = "age" > Ans </input></br>
+<input type = "submit" name = "submit" value = "Inscription"></input>
+</form>
+
+
+<!----------------------------------------------------------------------------->
+<hr/>
+
+Appel de la procedure PL/SQL traitement2 :
+<form method = "post" action = "http://ssh1.ie2.u-psud.fr/~namghar/php/trait_2.php" >
+Entrez l'identifiant client :</br>
+<input type = "text" name = "idc" ></input></br>
+la ville :</br>
+<input type = "text" name = "ville" > Ans </input></br>
+le jour  :</br>
+<input type = "text" name = "jour" > Ans </input></br>
+<input type = "submit" name = "submit" value = "Traiter 2"></input>
+</form>
+
+
+
+
+<!----------------------------------------------------------------------------->
+<hr/>
+
+Traitement 1 :
+Entrez le nom du client :
+son age :
+
+
+<!----------------------------------------------------------------------------->
+<hr/>
+<!----------------------------------------------------------------------------->
+
+</body>
+</html>
+
+--------------------------------------------------------------------------------
+
