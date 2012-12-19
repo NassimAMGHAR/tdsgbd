@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+
+<?xml-stylesheet type="text/xsl" href="sejours.xsl"?>
+
+<RACINE xmlns:xsql="urn:oracle-xsql" connection="namghar_a">
+	<xsql:include-xml href="sejours.xml"/>
+	 <TRAVELAGENCY>  
+			
+		 <CLIENTS>
+    			<CLIENT><NAME>Rita</NAME>
+				<xsql:query
+				rowset-element=""
+				row-element="TRAVEL">
+					select ville as DESTINATION, activite as ACTIVITY 
+					from client c, sejour s,village v
+					where nom = 'Rita' and c.idc = s.idc and v.idv = s.idv
+				</xsql:query>
+	 		</CLIENT>
+
+ 	 	 </CLIENTS>
+	  	
+	</TRAVELAGENCY>		       
+</RACINE>

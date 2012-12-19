@@ -1,0 +1,60 @@
+drop table client;
+create sequence seq_cl;
+
+create table clientss (
+idc integer primary key,
+nom varchar2(10) not null,
+age integer ,
+avoir float default 2000.0);
+
+drop table village;
+
+create table village (
+idv integer primary key,
+destination varchar2(10) not null,
+activite varchar2(10) not null,
+prix float not null,
+capacite integer not null);
+
+drop table sejour;
+
+create sequence seq_sej;
+
+create table sejour (
+ids integer primary key,
+idc integer, 
+idv integer,
+jour integer not null,
+foreign key (idc) references client (idc),
+foreign key (idv) references village (idv));
+
+alter table client
+add constrainteger
+ch_avoir check(avoir >= 0 and avoir <= 2000),
+ch_age check(age >= 0 and avoir <= 120);
+
+grant insert on village to sadams_a; 
+grant select on village to sadams_a; 
+grant update (prix,capacite,activite) on village to sadams_a;
+
+
+insert into village values (1,'hawai','surf',199.99,200);
+select destination from village;
+update village set prix=299.99 where idv=1;
+
+insert into sadams_a."Village" values (1,'hawai','surf',199.99,200);
+select * from sadams_a."Village";
+update sadams_a."Village" set prix=299.99 where idv=1;
+
+insert into client values (2,'mero', 22,1000);
+
+insert into sejour values (1,2,2,30); /* contraintegere de clé etrangére idv */
+insert into sejour values (1,3,1,30); /* contraintegere de clé etrangére idc */
+insert into sejour values (1,2,1,30);
+
+set serveroutput on;
+
+
+
+
+

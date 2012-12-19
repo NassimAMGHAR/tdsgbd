@@ -1,0 +1,65 @@
+-------------------------------------------------------------------------------
+-- traitements_td8.sql
+-------------------------------------------------------------------------------
+create or replace function traitement1(n clientss.nom%type, a clientss.age%type)
+    return clientss.idc%type 
+is
+    i clientss.idc%type;
+begin
+    dbms_output.put_line('ici function PL/SQL traitement1');
+    i := seq_cl.nextval;
+    insert into clientss(idc, nom, age) values(i, n, a);
+    return i;
+end;
+/
+
+set serveroutput on
+exec dbms_output.put_line(traitement1('Jeanne', 21));
+select * from clientss;
+
+-------------------------------------------------------------------------------
+create or replace procedure traitement2(
+    ic clientss.idc%type, d village.destination%type, j sejour.jour%type,
+    iv out village.idv%type, i_s out sejour.ids%type, a out village.activite%type) 
+is
+begin
+    dbms_output.put_line('ici procedure PL/SQL traitement2');
+
+    -- initialisation valeurs retour pour cas ou pas de village :
+    iv := -1;
+    i_s := -1;
+    a := 'neant';
+
+    for x in (select idv, activite, prix
+              from village
+              where destination = d
+              order by prix) loop
+
+        -- achat sejour :
+        insert into sejour values(seq_sej.nextval, ic, x.idv, j);
+        update clientss set avoir = avoir - x.prix where idc = ic;
+
+        -- valeurs de retour :
+        iv := x.idv;
+        select seq_sej.currval into i_s from dual;
+        a := x.activite;
+
+        return; -- on ne passe qu'une fois dans la boucle
+    end loop;
+end;
+/
+
+declare
+    v village.idv%type;
+    s sejour.ids%type;
+    a village.activite%type;
+begin
+    traitement2(7,'Chatel',79,v,s,a);
+    dbms_output.put_line('idv : '||v||', ids : '||s||', activite : '||a);
+    traitement2(7,'Rio',77,v,s,a);
+    dbms_output.put_line('idv : '||v||', ids : '||s||', activite : '||a);
+end;
+/
+
+-------------------------------------------------------------------------------
+

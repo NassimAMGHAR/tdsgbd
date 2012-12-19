@@ -1,0 +1,112 @@
+drop table billet;
+create table billet(client varchar2(10), dest varchar2(10), prix int);
+
+insert into billet values('waller','rio', 100);
+insert into billet values ( 'sivera','seychelles',90);
+
+select * from billet;
+
+/*create or replace procedure cli_sych is
+	cursor c is 
+	*/
+
+
+
+drop table t;
+create table t ( a integer, b integer);
+
+insert into t values (1,2);
+
+insert into t values (3,2);
+
+insert into t values (4,5);
+
+insert into t values (4,6);
+
+select * from t;
+
+set serveroutput on;
+
+create or replace procedure affiche( v t.b%type) is 
+		cursor c is 
+		select a from t where b= v;
+begin
+		for x in c loop
+			dbms_output.put_line(x.a);
+	end loop;
+end;
+/
+
+
+execute affiche(2);
+execute affiche(5);
+execute affiche(7);
+
+create or replace procedure affiche2( v t.b%type) is
+begin
+		for x in (select a from t where b = v) loop
+			dbms_output.put_line(x.a);
+		end loop;
+end;
+/
+
+execute affiche2(2);
+
+
+create or replace procedure consultation_villages(idc_p int, c out  sys_refcursor) is
+
+begin
+	open c for
+	select distinct destination,activite,prix
+	from village,sejour
+	where sejour.idv = village.idv and sejour.idc = idc_p;
+
+end;
+/
+
+create or replace procedure consultation_villages2(idc_p int) is
+	c sys_refcursor;
+	ville varchar2(100);
+	activite varchar2(100);
+	prix int;
+begin
+	consultation_villages(idc_p,c);
+	loop
+	fetch c into ville,activite,prix;
+	exit when c% Notfound;
+	dbms_output.put_line(ville);
+	dbms_output.put_line(activite);
+	dbms_output.put_line(prix);	
+	end loop;
+end;
+/
+
+
+create or replace procedure duplicate(nom varchar2) AUTHID CURRENT_USER is
+	texte varchar2(100);
+	
+begin
+	texte := 'create table '||nom||'2 as select * from '||nom;
+	dbms_output.put_line(texte);	
+	execute immediate(texte);
+end;
+/
+
+execute duplicate('client');
+
+
+create or replace procedure affiche_gen (tablename varchar2) is
+	c sys_cursor;
+	x int;
+	y varchar2(10);
+begin
+	open c for
+		'select * from '||tablename;
+	loop
+	fetch c into x,y;
+	exit when c% Notfound;
+	dbms_output.put_line(c.x); 
+	dbms_output.put_line(c.y);
+	end loop;
+end;
+/ 

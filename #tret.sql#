@@ -1,0 +1,12 @@
+
+
+create or replace procedure traitement2 ( idcc in client.idc%type, vil in village.ville%type, jour in sejour.jour%type,
+					 idv out village.idv%type, ids out sejour.ids%type, activ out village.activitetype ) is
+prix village.prix%type;
+begin
+	select idv, prix from village where ville = vil order by prix;
+	insert into sejour values(v_ids, idv, idcc, jour);
+	update client set avoir = avoir - prix where idc = idcc;
+	
+end;
+/

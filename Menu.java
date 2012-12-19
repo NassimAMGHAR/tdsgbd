@@ -1,0 +1,152 @@
+//-----------------------------------------------------------------------------
+// Menu.java
+//-----------------------------------------------------------------------------
+
+import java.io.*;
+import java.sql.*;
+
+class Menu {
+
+    static Connection connexion(String user, String mdp)
+	 throws SQLException,ClassNotFoundException{
+		System.out.println("ici connexion");
+	Class.forName("oracle.jdbc.driver.OracleDriver");
+	return DriverManager.getConnection("jdbc:oracle:thin:"+user+"/"+mdp+"@servora:1521:dbinfo");
+
+    }
+
+    static void deconnexion(Connection c)
+	throws 	SQLException
+    {
+	System.out.println("ici deconnexion");
+	c.close();
+    }
+
+    static void traitement1(Connection c) 
+	throws SQLException
+	
+    {
+	System.out.println("ici traitement1");
+	Statement s = c.createStatement();
+	String  nom = lireClavier();
+	int age = Integer.parseInt(lireClavier());	
+	int val = 0;
+	ResultSet r = s.executeQuery(" select seq_cl.nextval from dual ");
+	r.next();
+	val = r.getInt(1);
+	s.executeUpdate(" insert into clientss values ("+val+",'"+nom+"',"+age+",2000)");
+	System.out.println(" Id -> "+val);
+    }
+
+    static void traitement3(Connection c) 
+	throws SQLException
+    
+    {
+	System.out.println("ici traitement3");
+	Statement s = c.createStatement();
+	int x = Integer.parseInt(lireClavier());
+	int nb = 0;
+	nb = s.executeUpdate("delete from sejour where jour <"+x);
+	System.out.println(" "+nb+" deleted");
+    }
+
+     static void traitement1proc(Connection c) 
+	throws SQLException
+	
+    {
+	System.out.println("ici traitement1 proc ");	
+	System.out.print("Nom client : ");	
+	String  nom = lireClavier();	
+	System.out.print("Age client : ");	
+	int age = Integer.parseInt(lireClavier());
+	int val = 0;
+	String proc = "{ ? = call traitement1('"+nom+"',"+age+")}";	
+	CallableStatement s = c.prepareCall(proc);
+	s.registerOutParameter(1,Types.INTEGER);
+	s.execute();
+	System.out.println(" Val -> "+s.getInt(1));
+	s.close();	
+    }
+
+    static void traitement2proc(Connection c) 
+	throws SQLException
+    
+    {
+	System.out.println("ici traitement2 proc");
+	System.out.print("Id client : ");	
+	int idc = Integer.parseInt(lireClavier());
+	System.out.print("Destination  : ");		
+	String  dest = lireClavier();	
+	System.out.print("Jour  : ");	
+	int jour = Integer.parseInt(lireClavier());
+	
+	String proc = "{ call traitement2("+idc+",'"+dest+"',"+jour+",?,?,?)}";	
+	
+	CallableStatement s = c.prepareCall(proc);
+	s.registerOutParameter(1,Types.INTEGER);
+	s.registerOutParameter(2,Types.INTEGER);
+	s.registerOutParameter(3,Types.VARCHAR);
+	s.execute();
+	int idv,ids ;
+	String activ;
+	idv = s.getInt(1);
+	ids = s.getInt(2);
+	activ = s.getString(3);
+	s.close();
+	System.out.println(" Retour : idv->"+idv+", ids ->"+ids+", activite ->"+activ);
+    }
+     static void affichetous_client(Connection c) 
+	throws SQLException
+    
+    {
+	System.out.println("ici Affichage des clients");
+	Statement s = c.createStatement();	
+	ResultSet r  = s.executeQuery("select nom from clientss");
+	while(r.next())
+		System.out.println(" "+r.getString(1)+" ");
+    }
+
+    static String lireClavier() {
+	// Dans cette fonction l'exception est catchee pour ne pas avoir a la 
+        // gerer dans le main, et donc mieux voir les exceptions BD. 
+	try {
+	    BufferedReader clavier =
+		new BufferedReader(new InputStreamReader(System.in));
+	    return clavier.readLine();
+	} catch (Exception e) {
+	    return "erreur dans fonction lireClavier";
+	}
+    }
+
+    public static void main(String[] args)
+	throws  SQLException,ClassNotFoundException {
+	
+	Connection c = connexion("namghar_a","r4g1h3po");
+	
+	while (true) {
+	    System.out.println("-------------------------------");
+	    System.out.println("Bienvenue dans le menu Menu");
+	    System.out.println("1 : traitement1");
+	    System.out.println("2 : affichge clients");
+	    System.out.println("3 : traitement3");	 
+	    System.out.println("4 : traitement1 proc");
+	    System.out.println("5 : traitement2 proc");   
+	    System.out.println("9 : deconnexion");
+	    System.out.println("0 : terminer");
+	    System.out.print("Entrez votre choix : ");
+	    int n = Integer.parseInt(lireClavier());
+	    switch (n) {
+	    case 1 : traitement1(c); break;
+	    case 2 : affichetous_client(c);break;
+	    case 3 : traitement3(c); break;
+	    case 4 : traitement1proc(c); break;
+	    case 5 : traitement2proc(c); break;
+	    case 9 : deconnexion(c); break;
+	    case 0 : return;
+	    }
+	}
+    }
+}
+
+//-----------------------------------------------------------------------------
+

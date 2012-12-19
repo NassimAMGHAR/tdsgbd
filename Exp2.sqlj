@@ -1,0 +1,28 @@
+
+//sqlj 2
+import java.io.*;
+import java.sql.*;
+import oracle.sqlj.runtime.Oracle;
+
+public class Exp2 {
+	public static void main (String [] args) throws SQLException {
+		Oracle.connect(
+		 "jdbc:oracle:thin:@servora:1521:dbinfo",
+		 "namghar_a",
+		 "r4g1h3po",
+		 true// gestion des transactions
+		);
+
+		String n = args[0];
+		int a;
+ 		
+		#sql {
+		select age into :a from personne where nom = :n
+		};
+
+		System.out.println(n+" a " + a + " ans ");		
+
+		Oracle.close();
+	}
+}
+

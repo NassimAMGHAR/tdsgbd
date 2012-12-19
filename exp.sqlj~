@@ -1,0 +1,34 @@
+
+// sqlj 1
+import java.io.*;
+import java.sql.*;
+import oracle.sqlj.runtime.Oracle;
+
+/* 
+drop table personne ;
+create table personne ( nom varchar2(10), age integer);
+insert into personne values ('tot', 23);
+insert into personne values ('titi',23);
+select * from personne;
+*/
+
+public class exp {
+	public static void main (String [] args) throws SQLException {
+		Oracle.connect(
+		 "jdbc:oracle:thin:@servora:1521:dbinfo",
+		 "namghar_a",
+		 "r4g1h3po",
+		 true// gestion des transactions
+		);
+ 		#sql {
+		update personne set age = age - 1 where nom = 'toto'
+		};
+		Oracle.close();
+	}
+}
+
+/*
+ select * from personne;
+ toto 24
+ titi 23
+*/

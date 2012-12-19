@@ -1,0 +1,37 @@
+
+
+//sqlj 4
+import java.io.*;
+import java.sql.*;
+import oracle.sqlj.runtime.Oracle;
+
+public class Exp4 {
+	public static void main (String [] args) throws SQLException {
+		Oracle.connect(
+		 "jdbc:oracle:thin:@servora:1521:dbinfo",
+		 "namghar_a",
+		 "r4g1h3po",
+		 true// gestion des transactions
+		);
+
+		#sql iterator ex4(String ,int);
+		ex4 iter;
+		#sql iter = {
+			select nom, age from personne
+		};
+
+		String n = "";
+	 
+		int a = 0;
+
+		while(iter.next()){
+		
+		System.out.println(iter.nom()+ " a " + iter.age() + " ans");
+
+		}
+ 			
+
+		Oracle.close();
+	}
+}
+
